@@ -17,55 +17,126 @@ public class TouchResponseOrderStatus {
     /**
      * The status of the order
      */
-    public String status;
+    protected String status;
     
     /**
      * The status code of the order
      */
-    public int statusCode;
+    protected int statusCode;
     
     /**
      * If cancelled, the reason of the cancellation
      */
-    public String reasonCancelled;
+    protected String reasonCancelled;
 
     /**
      * The reference of the order
      */
-    public String refNumber;
+    protected String refNumber;
 
     /**
      * The reference of the order merchant side
      */
-    public String merchantRefNumber;
+    protected String merchantRefNumber;
 
     /**
      * 
      */
-    public float fee;
+    protected float fee;
     
     /**
      * 
      */
-    public TouchResponseOrderItemsStatus[] items;
+    protected TouchResponseOrderItemsStatus[] items;
 
     /**
      * Label of the shipping method
      */
-    public String shippingMethodLabel;
+    protected String shippingMethodLabel;
     /**
      * Extension fees for this order
      * @since 2.0
      */
-    public float extensionFee;
+    protected float extensionFee;
 
     @Override
     public String toString() {
-        return "TouchResponseOrderStatus [status=" + status + ", statusCode="
-                + statusCode + ", reasonCancelled=" + reasonCancelled
-                + ", refNumber=" + refNumber + ", merchantRefNumber="
-                + merchantRefNumber + ", fee=" + fee + ", items="
-                + Arrays.toString(items) + ", getClass()=" + getClass() + "]";
+        return "TouchResponseOrderStatus [status=" + getStatus() + ", statusCode="
+                + getStatusCode() + ", reasonCancelled=" + getReasonCancelled()
+                + ", refNumber=" + getRefNumber() + ", merchantRefNumber="
+                + getMerchantRefNumber() + ", fee=" + getFee() + ", items="
+                + Arrays.toString(getItems()) + ", getClass()=" + getClass() + "]";
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getReasonCancelled() {
+        return reasonCancelled;
+    }
+
+    public void setReasonCancelled(String reasonCancelled) {
+        this.reasonCancelled = reasonCancelled;
+    }
+
+    public String getRefNumber() {
+        return refNumber;
+    }
+
+    public void setRefNumber(String refNumber) {
+        this.refNumber = refNumber;
+    }
+
+    public String getMerchantRefNumber() {
+        return merchantRefNumber;
+    }
+
+    public void setMerchantRefNumber(String merchantRefNumber) {
+        this.merchantRefNumber = merchantRefNumber;
+    }
+
+    public float getFee() {
+        return fee;
+    }
+
+    public void setFee(float fee) {
+        this.fee = fee;
+    }
+
+    public TouchResponseOrderItemsStatus[] getItems() {
+        return items;
+    }
+
+    public void setItems(TouchResponseOrderItemsStatus[] items) {
+        this.items = items;
+    }
+
+    public String getShippingMethodLabel() {
+        return shippingMethodLabel;
+    }
+
+    public void setShippingMethodLabel(String shippingMethodLabel) {
+        this.shippingMethodLabel = shippingMethodLabel;
+    }
+
+    public float getExtensionFee() {
+        return extensionFee;
+    }
+
+    public void setExtensionFee(float extensionFee) {
+        this.extensionFee = extensionFee;
+    }
 }

@@ -11,15 +11,31 @@ public class TouchExtension {
      * Number of day max this extensions gives you
      * @since 1.1
      */
-    public int days;
+    protected int days;
     /**
      * The amount of fees this extensions costs
      * @since 1.1
      */
-    public float amount;
+    protected float amount;
 
     @Override
     public String toString() {
-        return "Extensions [days=" + days + ", fees=" + amount + "]";
+        return days + "\t" + amount;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
     }
 }

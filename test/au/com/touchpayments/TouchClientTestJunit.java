@@ -17,7 +17,6 @@ public class TouchClientTestJunit {
     private String merchantRefNumber = ""; // Fill when you have them
     private String orderSecurityToken = "";
     private String smsCode = "";
-    private float grandTotal = 15.20f;
 
     @Test
     public void testErrorCodes() {
@@ -55,7 +54,7 @@ public class TouchClientTestJunit {
     @Test
     public void testGetFee() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
-        float fee = tc.getFeeAmount(this.grandTotal);
+        float fee = tc.getFeeAmount(this.getOrder().getGrandTotal());
         assertEquals(0f, fee, 0f);
     }
 
@@ -63,7 +62,7 @@ public class TouchClientTestJunit {
     public void testGenerateOrder() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseGenerateOrder trgo = tc.generateOrder(this.getOrder());
-        System.out.println(trgo.token);
+        System.out.println(trgo.getToken());
     }
 
     
@@ -71,8 +70,8 @@ public class TouchClientTestJunit {
     public void testGetOrderStatusFromToken() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseOrderStatus tros = tc.getOrderStatusFromToken(this.orderSecurityToken);
-        System.out.println(tros.status);
-        assertEquals(tros.status, "new");
+        System.out.println(tros.getStatus());
+        assertEquals(tros.getStatus(), "new");
     }
 
     /**
@@ -81,9 +80,10 @@ public class TouchClientTestJunit {
     @Test
     public void testApproveOrderByToken() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
-        TouchResponseOrderStatus tros = tc.approveOrderByToken(this.orderSecurityToken, this.merchantRefNumber, this.grandTotal);
-        System.out.println(tros.status);
-        assertEquals(tros.status, "approved");
+        TouchResponseOrderStatus tros = tc.approveOrderByToken(
+                this.orderSecurityToken, this.merchantRefNumber, this.getOrder().getGrandTotal());
+        System.out.println(tros.getStatus());
+        assertEquals(tros.getStatus(), "approved");
     }
 
     @Test
@@ -97,22 +97,23 @@ public class TouchClientTestJunit {
     @Test
     public void testApproveOrderBySmsCode() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
-        TouchResponseOrderStatus tros = tc.approveOrderBySmsCode(this.orderSecurityToken, this.merchantRefNumber, this.grandTotal, this.smsCode);
-        assertEquals(tros.statusCode, 3);
+        TouchResponseOrderStatus tros = tc.approveOrderBySmsCode(
+                this.orderSecurityToken, this.merchantRefNumber, this.getOrder().getGrandTotal(), this.smsCode);
+        assertEquals(tros.getStatusCode(), 3);
     }
     
     @Test
     public void testGetOrder() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseOrderStatus tros = tc.getOrder(this.merchantRefNumber);
-        assertEquals(tros.merchantRefNumber, this.merchantRefNumber);
+        assertEquals(tros.getMerchantRefNumber(), this.merchantRefNumber);
     }
     
     @Test
     public void testSetOrderStatusCancelled() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseOrderStatus tros = tc.setOrderStatusCancelled(this.merchantRefNumber, "BECAUSE");
-        assertEquals(tros.statusCode, 16);
+        assertEquals(tros.getStatusCode(), 16);
     }
     
 
@@ -120,35 +121,35 @@ public class TouchClientTestJunit {
     public void testSetOrderItemStatusCancelled() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseOrderStatus tros = tc.setOrderItemStatusCancelled(this.merchantRefNumber, new int[]{3688}, "BECAUSE");
-        assertEquals(tros.statusCode, 16);
+        assertEquals(tros.getStatusCode(), 16);
     }
 
     @Test
     public void testSetOrderStatusShipped() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseOrderStatus tros = tc.setOrderStatusShipped(this.merchantRefNumber);
-        assertEquals(tros.statusCode, 5);
+        assertEquals(tros.getStatusCode(), 5);
     }
 
     @Test
     public void testSetOrderItemStatusReturnPending() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseOrderStatus tros = tc.setOrderItemStatusReturnPending(this.merchantRefNumber, new int[]{3688});
-        assertEquals(tros.statusCode, 14);
+        assertEquals(tros.getStatusCode(), 14);
     }
     
     @Test
     public void testSetOrderItemStatusReturned() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseOrderStatus tros = tc.setOrderItemStatusReturned(this.merchantRefNumber, new int[]{3688});
-        assertEquals(tros.statusCode, 15);
+        assertEquals(tros.getStatusCode(), 15);
     }
 
     @Test
     public void testSetOrderItemStatusReturnDenied() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         TouchResponseOrderStatus tros = tc.setOrderItemStatusReturnDenied(this.merchantRefNumber, new int[]{3688});
-        assertEquals(tros.statusCode, 20);
+        assertEquals(tros.getStatusCode(), 20);
     }
     
     @Test
@@ -185,35 +186,32 @@ public class TouchClientTestJunit {
     public void testGetJavascriptSources() throws Throwable {
         TouchClient tc = new TouchClient(this.getPrivateApiKey());
         String sid = UUID.randomUUID().toString();
-        System.out.println(sid);
         TouchResponseJavascriptSources js = tc.getJavascriptSources(sid);
         System.out.println(js);
+        assertNotNull(js.getUrl());
+    }
+    @Test
+    public void testGenerateExpressOrder() throws Throwable {
+        TouchClient tc = new TouchClient(this.getPrivateApiKey());
+        TouchResponseGenerateOrder tgo = tc.generateExpressOrder(this.getOrder());
+        System.out.println(tgo);
     }
 
-
+    ///////////////
+    // TEST SETS //
+    ///////////////
     private TouchOrder getOrder() {
         TouchOrder order = new TouchOrder();
-        order.addressBilling = new TouchAddress(TouchAddress.COUNTRY_AU);
-        order.addressBilling.firstName = "Victor";
-        order.addressBilling.lastName = "M";
-        order.addressBilling.middleName = "";
-        order.addressBilling.number = "301/441-449";
-        order.addressBilling.addressOne = "Elizabeth Street";
-        order.addressBilling.postcode = "2010";
-        order.addressBilling.suburb = "Surry Hills";
-        order.addressBilling.state = "NSW";
 
-        order.addressShipping = order.addressBilling;
+        order.setAddressBilling(this.getAddress());
+        order.setAddressShipping(order.getAddressBilling());
+        order.setCustomer(this.getCustomer());
 
-        order.customer = this.getCustomer();
+        order.setGrandTotal(15.20f);
+        order.setGst(1.1f);
+        order.setItems(this.getItems());
+        order.setShippingCosts(0f);
 
-        order.grandTotal = this.grandTotal ;
-        order.gst = 1.1f;
-        order.items = new TouchItem[]{new TouchItem()};
-        order.items[0].price = 15.20f;
-        order.items[0].quantity = 1;
-        order.items[0].sku = "dsklfgjsdlgfnsdbnjk";
-        order.shippingCosts = 0f;
         return order;
     }
     private TouchCustomer getCustomer() {
@@ -223,14 +221,32 @@ public class TouchClientTestJunit {
         customer.setTelephoneMobile("0400000000");
         return customer;
     }
-
+    private TouchAddress getAddress() {
+        TouchAddress address = new TouchAddress(TouchAddress.COUNTRY_AU);
+        address.setFirstName("Victor");
+        address.setLastName("M");
+        address.setMiddleName("");
+        address.setNumber("301/441-449");
+        address.setAddressOne("Elizabeth Street");
+        address.setPostcode("2010");
+        address.setSuburb("Surry Hills");
+        address.setState("NSW");
+        return address;
+    }
+    private TouchItem[] getItems() {
+        TouchItem[] items = new TouchItem[]{new TouchItem()};
+        items[0].setPrice(15.20f);
+        items[0].setQuantity(1);
+        items[0].setSku("TestSKU123");
+        return items;
+    }
     private TouchOrderItemsUpdate getOrderItemsUpdate() {
         TouchOrderItemsUpdate orderUpdate = new TouchOrderItemsUpdate();
-        orderUpdate.items = new TouchItem[]{new TouchItem()};
-        orderUpdate.items[0] = getOrder().items[0];
-        orderUpdate.items[0].price = 14.20f;
+        orderUpdate.setItems(new TouchItem[]{new TouchItem()});
+        orderUpdate.getItems()[0] = getOrder().getItems()[0];
+        orderUpdate.getItems()[0].setPrice(14.20f);
 
-        orderUpdate.grandTotal = 14.20f;
+        orderUpdate.setGrandTotal(14.20f);
         return orderUpdate;
     }
     private String getPrivateApiKey() {

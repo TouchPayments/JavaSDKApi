@@ -30,29 +30,69 @@ public class TouchItem {
      * Stock keeping unit
      * @since 1.0
      */
-    public String sku;
+    protected String sku;
     
     /**
      * The price of the item, GST included 
      * @since 1.0
      */
-    public float price;
+    protected float price;
     
     /**
      * The description of this item
      * @since 1.0
      */
-    public String description;
+    protected String description;
     
     /**
      * Quantity of the item ordered
      * @since 1.0
      */
-    public int quantity;
+    protected int quantity;
     
     /**
      * The image URL
      * @since 1.0
      */
-    public String image;
+    protected String image;
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
