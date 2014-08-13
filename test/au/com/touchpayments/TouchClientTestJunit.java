@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -17,45 +18,7 @@ public class TouchClientTestJunit {
     private String orderSecurityToken = "";
     private String smsCode = "";
     private float grandTotal = 15.20f;
-    
-    private TouchOrder getOrder() {
-        TouchOrder order = new TouchOrder();
-        order.addressBilling = new TouchAddress(TouchAddress.COUNTRY_AU);
-        order.addressBilling.firstName = "Victor";
-        order.addressBilling.lastName = "M";
-        order.addressBilling.middleName = "";
-        order.addressBilling.number = "301/441-449";
-        order.addressBilling.addressOne = "Elizabeth Street";
-        order.addressBilling.postcode = "2010";
-        order.addressBilling.suburb = "Surry Hills";
-        order.addressBilling.state = "NSW";
-        
-        order.addressShipping = order.addressBilling;
-        
-        order.customer = new TouchCustomer();
-        order.customer.email = "test@touchpayments.com.au";
-        order.customer.dob = "12/07/1998";
-        order.customer.telephoneMobile = "0400000000";
-        
-        order.grandTotal = this.grandTotal ;
-        order.gst = 1.1f;
-        order.items = new TouchItem[]{new TouchItem()};
-        order.items[0].price = 15.20f;
-        order.items[0].quantity = 1;
-        order.items[0].sku = "dsklfgjsdlgfnsdbnjk";
-        order.shippingCosts = 0f;
-        return order;
-    }
-    
-    private TouchOrderItemsUpdate getOrderItemsUpdate() {
-        TouchOrderItemsUpdate orderUpdate = new TouchOrderItemsUpdate();
-        orderUpdate.items = new TouchItem[]{new TouchItem()};
-        orderUpdate.items[0] = getOrder().items[0];
-        orderUpdate.items[0].price = 14.20f;
-        
-        orderUpdate.grandTotal = 14.20f;
-        return orderUpdate;
-    }
+
     @Test
     public void testErrorCodes() {
         assertEquals("Error codes has changed!", 
@@ -211,6 +174,65 @@ public class TouchClientTestJunit {
         }
     }
 
+    @Test
+    public void testGetCustomer() throws Throwable {
+        TouchClient tc = new TouchClient(this.getPrivateApiKey());
+        TouchResponseCustomer tCustomer = tc.getCustomer(this.getCustomer().getEmail());
+        System.out.println(tCustomer);
+    }
+
+    @Test
+    public void testGetJavascriptSources() throws Throwable {
+        TouchClient tc = new TouchClient(this.getPrivateApiKey());
+        String sid = UUID.randomUUID().toString();
+        System.out.println(sid);
+        TouchResponseJavascriptSources js = tc.getJavascriptSources(sid);
+        System.out.println(js);
+    }
+
+
+    private TouchOrder getOrder() {
+        TouchOrder order = new TouchOrder();
+        order.addressBilling = new TouchAddress(TouchAddress.COUNTRY_AU);
+        order.addressBilling.firstName = "Victor";
+        order.addressBilling.lastName = "M";
+        order.addressBilling.middleName = "";
+        order.addressBilling.number = "301/441-449";
+        order.addressBilling.addressOne = "Elizabeth Street";
+        order.addressBilling.postcode = "2010";
+        order.addressBilling.suburb = "Surry Hills";
+        order.addressBilling.state = "NSW";
+
+        order.addressShipping = order.addressBilling;
+
+        order.customer = this.getCustomer();
+
+        order.grandTotal = this.grandTotal ;
+        order.gst = 1.1f;
+        order.items = new TouchItem[]{new TouchItem()};
+        order.items[0].price = 15.20f;
+        order.items[0].quantity = 1;
+        order.items[0].sku = "dsklfgjsdlgfnsdbnjk";
+        order.shippingCosts = 0f;
+        return order;
+    }
+    private TouchCustomer getCustomer() {
+        TouchCustomer customer = new TouchCustomer();
+        customer.setEmail("test@touchpayments.com.au");
+        customer.setDob("12/07/1998");
+        customer.setTelephoneMobile("0400000000");
+        return customer;
+    }
+
+    private TouchOrderItemsUpdate getOrderItemsUpdate() {
+        TouchOrderItemsUpdate orderUpdate = new TouchOrderItemsUpdate();
+        orderUpdate.items = new TouchItem[]{new TouchItem()};
+        orderUpdate.items[0] = getOrder().items[0];
+        orderUpdate.items[0].price = 14.20f;
+
+        orderUpdate.grandTotal = 14.20f;
+        return orderUpdate;
+    }
     private String getPrivateApiKey() {
         return privateApiKey;
     }

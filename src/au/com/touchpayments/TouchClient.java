@@ -73,7 +73,7 @@ public class TouchClient {
         try {
             url = this.buildApiUrl();
         } catch (MalformedURLException e) {
-            // Should not happen, as we provide the URL
+            // Should not happen, as the URL is provided
             // so we handle it here.
             e.printStackTrace();
         }
@@ -130,7 +130,7 @@ public class TouchClient {
     public float getFeeAmount(float grandTotal) throws Throwable {
         float fee;
         try {
-            fee = this.invoke("getFeeAmount", float.class);
+            fee = this.invoke("getFeeAmount", new Object[]{grandTotal}, float.class);
         } catch (JsonRpcClientException e) {
             fee = 0f;
         }
@@ -138,7 +138,7 @@ public class TouchClient {
     }
 
     /**
-     * Generate a pending order
+     * Generate an new order
      * The new order will be pending until approval
      *
      * @param order a TouchOrder
@@ -153,6 +153,18 @@ public class TouchClient {
         return this.invoke("generateOrder", new Object[]{order}, TouchResponseGenerateOrder.class);
     }
 
+    /**
+     * Generate an order for express
+     * The new order will be pending until approval
+     *
+     * @param order a TouchOrder
+     * @return a response with the order token so we can retrieve it later
+     * @throws Throwable
+     * @since Express
+     */
+    public TouchResponseGenerateOrder generateExpressOrder(TouchOrder order) throws Throwable {
+        return this.invoke("generateExpressOrder", new Object[]{order}, TouchResponseGenerateOrder.class);
+    }
 
     /**
      * Validation of the order
@@ -346,12 +358,12 @@ public class TouchClient {
      * Returns masked user details for the account linked to the provided email address
      * or null if the customer can not be find
      * @param email email of the customer
-     * @return TouchCustomer|null
+     * @return TouchResponseCustomer|null
      * @throws Throwable
      * @since 2.0
      */
-    public TouchCustomer getCustomer(String email) throws Throwable {
-        return this.invoke("getCustomer", new Object[]{email}, TouchCustomer.class);
+    public TouchResponseCustomer getCustomer(String email) throws Throwable {
+        return this.invoke("getCustomer", new Object[]{email}, TouchResponseCustomer.class);
     }
 
     /**
@@ -371,8 +383,8 @@ public class TouchClient {
      * @throws Throwable
      * @since 2.0
      */
-    public String getJavascriptSources(String idClient) throws Throwable {
-        return this.invoke("getJavascriptSources", new Object[]{idClient}, String.class);
+    public TouchResponseJavascriptSources getJavascriptSources(String idClient) throws Throwable {
+        return this.invoke("getJavascriptSources", new Object[]{idClient}, TouchResponseJavascriptSources.class);
     }
 
     /**
@@ -413,7 +425,7 @@ public class TouchClient {
 
     /**
      * JsonRpcHttpClient invocation wrapper.
-     * No Params? Might mean minimum params. Let me
+     * No Params? Might mean minimum params.
      *
      * @param method you want to call on the server
      * @param clazz  Hey... What do you actually expect
