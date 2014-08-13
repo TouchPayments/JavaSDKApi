@@ -63,6 +63,12 @@ public class TouchOrder {
      */
     protected int extendingDays;
 
+    /**
+     * Available shipping methods for Express
+     * @since Express
+     */
+    protected TouchShippingMethod shippingMethods;
+
     @Override
     public String toString() {
         return "TouchOrder [grandTotal=" + getGrandTotal() + ", shippingCosts="
@@ -136,4 +142,13 @@ public class TouchOrder {
     public void setExtendingDays(int extendingDays) {
         this.extendingDays = extendingDays;
     }
+
+    public TouchShippingMethod getShippingMethods() {
+        return shippingMethods;
+    }
+
+    public void setShippingMethods(TouchShippingMethod shippingMethods) {
+        this.shippingMethods = shippingMethods;
+    }
+
 }
