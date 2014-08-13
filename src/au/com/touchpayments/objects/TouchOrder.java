@@ -67,7 +67,7 @@ public class TouchOrder {
      * Available shipping methods for Express
      * @since Express
      */
-    protected TouchShippingMethod shippingMethods;
+    protected TouchShippingMethod[] shippingMethods;
 
     @Override
     public String toString() {
@@ -143,11 +143,11 @@ public class TouchOrder {
         this.extendingDays = extendingDays;
     }
 
-    public TouchShippingMethod getShippingMethods() {
+    public TouchShippingMethod[] getShippingMethods() {
         return shippingMethods;
     }
 
-    public void setShippingMethods(TouchShippingMethod shippingMethods) {
+    public void setShippingMethods(TouchShippingMethod[] shippingMethods) {
         this.shippingMethods = shippingMethods;
     }
 

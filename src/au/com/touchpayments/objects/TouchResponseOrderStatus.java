@@ -47,7 +47,7 @@ public class TouchResponseOrderStatus {
     /**
      * 
      */
-    protected TouchResponseOrderItemsStatus[] items;
+    protected TouchResponseOrderItemStatus[] items;
 
     /**
      * Label of the shipping method
@@ -116,11 +116,11 @@ public class TouchResponseOrderStatus {
         this.fee = fee;
     }
 
-    public TouchResponseOrderItemsStatus[] getItems() {
+    public TouchResponseOrderItemStatus[] getItems() {
         return items;
     }
 
-    public void setItems(TouchResponseOrderItemsStatus[] items) {
+    public void setItems(TouchResponseOrderItemStatus[] items) {
         this.items = items;
     }
 
